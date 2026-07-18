@@ -85,9 +85,11 @@ db_path = current_dir / "activities.db"
 
 
 def get_connection() -> sqlite3.Connection:
-    connection = sqlite3.connect(db_path)
+    connection = sqlite3.connect(db_path, timeout=30)
     connection.row_factory = sqlite3.Row
     connection.execute("PRAGMA foreign_keys = ON")
+    connection.execute("PRAGMA busy_timeout = 30000")
+    connection.execute("PRAGMA journal_mode = WAL")
     return connection
 
 
