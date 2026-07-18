@@ -123,9 +123,8 @@ def init_db() -> None:
             for name, details in INITIAL_ACTIVITIES.items():
                 connection.execute(
                     """
-                    INSERT INTO activities (name, description, schedule, max_participants)
+                    INSERT OR IGNORE INTO activities (name, description, schedule, max_participants)
                     VALUES (?, ?, ?, ?)
-                    """,
                     (
                         name,
                         details["description"],
