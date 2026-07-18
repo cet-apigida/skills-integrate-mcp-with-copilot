@@ -135,9 +135,8 @@ def init_db() -> None:
                 for email in details["participants"]:
                     connection.execute(
                         """
-                        INSERT INTO activity_participants (activity_name, email)
+                        INSERT OR IGNORE INTO activity_participants (activity_name, email)
                         VALUES (?, ?)
-                        """,
                         (name, email),
                     )
 
@@ -174,7 +173,9 @@ def load_activities() -> dict:
     return activities
 
 
-init_db()
+@app.on_event("startup")
+def on_startup() -> None:
+    init_db()
 
 
 @app.get("/")
